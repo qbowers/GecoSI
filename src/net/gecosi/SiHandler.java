@@ -3,14 +3,11 @@
  */
 package net.gecosi;
 
-import gnu.io.CommPortIdentifier;
-import gnu.io.NoSuchPortException;
-import gnu.io.PortInUseException;
-import gnu.io.SerialPort;
-
 import java.io.IOException;
 import java.util.TooManyListenersException;
 import java.util.concurrent.ArrayBlockingQueue;
+
+import com.fazecast.jSerialComm.SerialPort;
 
 import net.gecosi.adapter.logfile.LogFilePort;
 import net.gecosi.adapter.rxtx.RxtxPort;
@@ -46,22 +43,12 @@ public class SiHandler implements Runnable {
 	}
 
 	public void connect(String portname) throws IOException, TooManyListenersException {
-		try {
-			CommPortIdentifier portId = CommPortIdentifier.getPortIdentifier(portname);
-			if( portId.isCurrentlyOwned() ) {
-				siListener.notify(CommStatus.FATAL_ERROR, "Port owned by other app");
-			} else {
-				GecoSILogger.open("######");
-				GecoSILogger.logTime("Start " + portname);
-				start();
-				SerialPort port = (SerialPort) portId.open("GecoSI", 2000);
-				driver = new SiDriver(new RxtxPort(port), this).start();
-			}
-		} catch (NoSuchPortException e) {
-			siListener.notify(CommStatus.FATAL_ERROR, "Port unknowned");
-		} catch (PortInUseException e) {
-			siListener.notify(CommStatus.FATAL_ERROR, "Port in use");
-		}
+		SerialPort port = SerialPort.getCommPort(portname);
+		port.openPort();
+		GecoSILogger.open("######");
+		GecoSILogger.logTime("Start " + portname);
+		start();
+		driver = new SiDriver(new RxtxPort(port), this).start();
 	}
 
 	public void readLog(String logFilename) throws IOException {

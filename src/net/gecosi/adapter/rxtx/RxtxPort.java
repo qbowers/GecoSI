@@ -3,11 +3,10 @@
  */
 package net.gecosi.adapter.rxtx;
 
-import gnu.io.SerialPort;
-import gnu.io.UnsupportedCommOperationException;
-
 import java.io.IOException;
 import java.util.TooManyListenersException;
+
+import com.fazecast.jSerialComm.SerialPort;
 
 import net.gecosi.internal.CommWriter;
 import net.gecosi.internal.SiMessageQueue;
@@ -32,8 +31,8 @@ public class RxtxPort implements SiPort {
 	
 	public SiMessageQueue createMessageQueue() throws TooManyListenersException, IOException {
 		SiMessageQueue messageQueue = new SiMessageQueue(10);
-		port.addEventListener(new RxtxCommReader(port.getInputStream(), messageQueue));
-		port.notifyOnDataAvailable(true);
+		port.addDataListener(new RxtxCommReader(port.getInputStream(), messageQueue));
+		//port.notifyOnDataAvailable(true);
 		return messageQueue;
 	}
 	
@@ -41,21 +40,22 @@ public class RxtxPort implements SiPort {
 		return new RxtxCommWriter(port.getOutputStream());
 	}
 
-	public void setupHighSpeed() throws UnsupportedCommOperationException {
+	public void setupHighSpeed() {
 		setSpeed(38400);		
 	}
 
-	public void setupLowSpeed() throws UnsupportedCommOperationException {
+	public void setupLowSpeed() {
 		setSpeed(4800);		
 	}
 
-	public void setSpeed(int baudRate) throws UnsupportedCommOperationException {
-		port.setSerialPortParams(baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+	public void setSpeed(int baudRate) {
+		port.setComPortParameters(baudRate, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
+		
 	}
 
 	public void close() {
 		// TODO: close streams?
-		port.close();
+		port.closePort();
 	}
 	
 }

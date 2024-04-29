@@ -3,7 +3,7 @@
  */
 package net.gecosi.adapter.logfile;
 
-import gnu.io.UnsupportedCommOperationException;
+//import gnu.io.UnsupportedCommOperationException;
 
 import java.io.IOException;
 import java.util.TooManyListenersException;
@@ -36,10 +36,10 @@ public class LogFilePort implements SiPort {
 	}
 
 	@Override
-	public void setupHighSpeed() throws UnsupportedCommOperationException {	}
+	public void setupHighSpeed() {	}
 
 	@Override
-	public void setupLowSpeed() throws UnsupportedCommOperationException {	}
+	public void setupLowSpeed() {	}
 
 	@Override
 	public void close() {}

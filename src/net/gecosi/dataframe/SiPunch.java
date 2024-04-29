@@ -22,8 +22,15 @@ public class SiPunch {
 		return this.code;
 	}
 	
-	public long timestamp() {
-		return this.timestamp;
+	public long timestamp() 
+	{
+	  /*
+	  if(timestamp > 86400000)
+	  {
+	    this.timestamp = timestamp - 86400000;
+	  }
+	  */
+	  return this.timestamp;
 	}
 	
 }

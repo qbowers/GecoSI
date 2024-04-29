@@ -3,12 +3,13 @@
  */
 package net.gecosi.adapter.rxtx;
 
-import gnu.io.SerialPortEvent;
-import gnu.io.SerialPortEventListener;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+
+import com.fazecast.jSerialComm.SerialPort;
+import com.fazecast.jSerialComm.SerialPortDataListener;
+import com.fazecast.jSerialComm.SerialPortEvent;
 
 import net.gecosi.internal.GecoSILogger;
 import net.gecosi.internal.SiMessage;
@@ -19,7 +20,7 @@ import net.gecosi.internal.SiMessageQueue;
  * @since Feb 13, 2013
  *
  */
-public class RxtxCommReader implements SerialPortEventListener {
+public class RxtxCommReader implements SerialPortDataListener {
 
 	public static final int MAX_MESSAGE_SIZE = 139;
 
@@ -105,6 +106,11 @@ public class RxtxCommReader implements SerialPortEventListener {
 
 	private SiMessage extractMessage(byte[] answer, int nbBytes) {
 		return new SiMessage( Arrays.copyOfRange(answer, 0, nbBytes) );
+	}
+
+	@Override
+	public int getListeningEvents() {
+		return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
 	}
 
 }

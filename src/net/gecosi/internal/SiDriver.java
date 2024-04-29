@@ -3,7 +3,7 @@
  */
 package net.gecosi.internal;
 
-import gnu.io.UnsupportedCommOperationException;
+//import gnu.io.UnsupportedCommOperationException;
 
 import java.io.IOException;
 import java.util.TooManyListenersException;
@@ -67,7 +67,7 @@ public class SiDriver implements Runnable {
 	}
 
 	private SiDriverState startupBootstrap()
-			throws UnsupportedCommOperationException, IOException, InterruptedException, InvalidMessage {
+			throws IOException, InterruptedException, InvalidMessage {
 		try {
 			siHandler.notify(CommStatus.STARTING);
 			siPort.setupHighSpeed();
